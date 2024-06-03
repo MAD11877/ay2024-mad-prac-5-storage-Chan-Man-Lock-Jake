@@ -83,6 +83,16 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateUser(User user) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_FOLLOWED, user.getFollowed());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.update(TABLE_USERS, values, COLUMN_ID + " = " + user.id, null);
+        db.close();
+    }
+
     public User findUser(String userName) {
         String query =
                 "SELECT * FROM " + TABLE_USERS +

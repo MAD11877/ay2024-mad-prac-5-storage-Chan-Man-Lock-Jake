@@ -3,6 +3,7 @@ package sg.edu.np.mad.madpractical5;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,32 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(UserViewHolder holder, int position) {
         User user = userRecyclerList.get(position);
         holder.userName.setText(user.getName());
-        holder.userDeveloper.setText(user.getDescription());
+        holder.userDescription.setText(user.getDescription());
+
+        holder.userDisplayPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Profile")
+                        .setMessage(user.getName())
+                        .setPositiveButton("View", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent toMainActivity = new Intent(view.getContext(), MainActivity.class);
+                                String[] data = {user.getName(), user.getDescription(), String.format("%s",user.getId()), String.format("%s",user.getFollowed())};
+                                toMainActivity.putExtra("userData", data);
+                                view.getContext().startActivity(toMainActivity);
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) { dialog.cancel(); }
+                        });
+                builder.create();
+                builder.show();
+            }
+        });
     }
 
     @Override
@@ -44,13 +70,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public class UserViewHolder extends RecyclerView.ViewHolder {
 
         ImageView userDisplayPicture;
-        TextView userName, userDeveloper;
+        TextView userName, userDescription;
 
         public UserViewHolder(View view) {
             super(view);
             userDisplayPicture = view.findViewById(R.id.imageView01);
             userName = view.findViewById(R.id.name);
-            userDeveloper = view.findViewById(R.id.developer);
+            userDescription = view.findViewById(R.id.descrption);
         }
     }
 }

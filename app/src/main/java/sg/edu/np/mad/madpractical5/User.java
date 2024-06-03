@@ -1,5 +1,9 @@
 package sg.edu.np.mad.madpractical5;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 public class User {
     public String name;
     public String description;

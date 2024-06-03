@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,13 +43,35 @@ public class MainActivity extends AppCompatActivity {
         TextView tvDescription = findViewById(R.id.profileDescription);
         Button btnFollow = findViewById(R.id.profileFollow);
         Button btnMessage = findViewById(R.id.profileMessage);
-    }
 
-    /*public void newUser (View view) {
-        DataBaseHandler dbHandler = new DataBaseHandler(this, null, null, 1);
-        int quantity = Integer.parseInt(quantityBox.getText().toString());
-        User user = new User(productBox.getText().toString(), quantity);
-        dbHandler.addProduct(product);
-        productBox.setText("");
-        quantityBox.setText("");*/
+        String[] Data = getIntent().getExtras().getStringArray("userData");
+        User userData = new User(Data[0], Data[1], Boolean.parseBoolean(Data[3]));
+        userData.setId(Integer.parseInt(Data[2]));
+
+        dbHandler = new DataBaseHandler(this, null, null, 1);
+        db = dbHandler.getWritableDatabase();
+
+        tvName.setText(userData.getName());
+        tvDescription.setText(userData.getDescription());
+        //btnFollow.setText(Boolean.toString(userData.getFollowed()));
+
+        if (userData.getFollowed()){ //TRUE means already followed means text is UNFOLLOW
+            btnFollow.setText("Unfollow");
+        }
+        else { btnFollow.setText("Follow"); } //NOT TRUE means not followed means text is FOLLOW
+        btnFollow.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                if (userData.getFollowed()){ //TRUE means change to FALSE means text set to FOllOW
+                    btnFollow.setText("Follow");
+                    userData.setFollowed(false);
+                    Toast.makeText(getApplicationContext(), "Followed", Toast.LENGTH_SHORT).show();
+                } else if (userData.getFollowed()) {
+                    btnFollow.setText("Unfollow");
+                    userData.setFollowed(true);
+                    Toast.makeText(getApplicationContext(), "Unfollowed", Toast.LENGTH_SHORT).show();
+                }
+                dbHandler.updateUser(userData);
+            }
+        });
+    }
 }
