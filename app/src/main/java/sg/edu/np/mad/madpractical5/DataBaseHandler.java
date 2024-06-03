@@ -6,12 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class DataBaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "userDB";
+    private static final String DATABASE_NAME = "UserDB.db";
     public static final String TABLE_USERS = "users";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_DESCRIPTION = "description";
@@ -26,12 +28,17 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USERS_TABLE =
                 "CREATE TABLE " + TABLE_USERS + "(" +
-                        COLUMN_NAME + "TEXT," +
-                        COLUMN_DESCRIPTION + "TEXT," +
-                        COLUMN_ID + "INTEGER PRIMARY KEY AUTO INCREMENT," +
-                        COLUMN_FOLLOWED + "BOOLEAN" + ")";
+                        COLUMN_NAME + " TEXT," +
+                        COLUMN_DESCRIPTION + " TEXT," +
+                        COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        COLUMN_FOLLOWED + " BOOLEAN" + ")";
 
-        createNewUserData();
+        db.execSQL(CREATE_USERS_TABLE);
+    }
+
+    public void onReset(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        onCreate(db);
     }
 
     @Override
@@ -40,11 +47,28 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void getUsers() {
+    public ArrayList<User> getUsers() {
         String query =
                 "SELECT * FROM " + TABLE_USERS;
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
 
+        ArrayList<User> userList = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            User user = new User();
+            user.setName(cursor.getString(0));
+            user.setDescription(cursor.getString(1));
+            user.setId(cursor.getInt(2));
+            user.setFollowed(Boolean.parseBoolean(cursor.getString(3)));
+
+            userList.add(user);
+        }
+        cursor.close();
+
+        db.close();
+        return userList;
     }
 
     public void addUser(User user) {
@@ -105,7 +129,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
         db.close();
         return result;
-
     }
 
     public void createNewUserData() {
