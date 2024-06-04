@@ -1,7 +1,6 @@
 package sg.edu.np.mad.madpractical5;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.DrawableWrapper;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -13,12 +12,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
 public class ListActivity extends AppCompatActivity {
 
     private SQLiteDatabase db;
-    private DataBaseHandler dbHandler;
     private UserAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -34,7 +30,7 @@ public class ListActivity extends AppCompatActivity {
         });
         recyclerView = findViewById(R.id.listRecyclerView);
 
-        dbHandler = new DataBaseHandler(this, null, null, 1);
+        DataBaseHandler dbHandler = new DataBaseHandler(this, null, null, 1);
         db = dbHandler.getWritableDatabase();
         dbHandler.onReset(db);
         dbHandler.createNewUserData();
