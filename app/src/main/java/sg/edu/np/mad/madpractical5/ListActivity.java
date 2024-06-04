@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ListActivity extends AppCompatActivity {
 
     private SQLiteDatabase db;
-    DataBaseHandler dbHandler;
+    private DataBaseHandler dbHandler;
     private UserAdapter adapter;
     private RecyclerView recyclerView;
 
