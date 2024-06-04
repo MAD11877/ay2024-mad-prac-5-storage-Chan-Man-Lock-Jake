@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             user.setName(cursor.getString(0));
             user.setDescription(cursor.getString(1));
             user.setId(cursor.getInt(2));
-            user.setFollowed(Boolean.parseBoolean(cursor.getString(3)));
+            if (cursor.getInt(3) == 1) {
+                user.setFollowed(true);
+            } else user.setFollowed(false);
 
             userList.add(user);
         }
@@ -84,12 +87,11 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
 
     public void updateUser(User user) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_FOLLOWED, user.getFollowed());
-
         SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_FOLLOWED, user.getFollowed() ? 1:0);
 
-        db.update(TABLE_USERS, values, COLUMN_ID + " = " + user.id, null);
+        db.update(TABLE_USERS, values, COLUMN_ID + " = ?", new String[] {String.valueOf(user.getId())});
         db.close();
     }
 

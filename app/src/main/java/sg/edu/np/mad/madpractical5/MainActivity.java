@@ -2,6 +2,7 @@ package sg.edu.np.mad.madpractical5;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        dbHandler = new DataBaseHandler(this, null, null, 1);
+        db = dbHandler.getWritableDatabase();
+
         TextView tvName = findViewById(R.id.profileName);
         TextView tvDescription = findViewById(R.id.profileDescription);
         Button btnFollow = findViewById(R.id.profileFollow);
@@ -47,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
         String[] Data = getIntent().getExtras().getStringArray("userData");
         User userData = new User(Data[0], Data[1], Boolean.parseBoolean(Data[3]));
         userData.setId(Integer.parseInt(Data[2]));
-
-        dbHandler = new DataBaseHandler(this, null, null, 1);
-        db = dbHandler.getWritableDatabase();
 
         tvName.setText(userData.getName());
         tvDescription.setText(userData.getDescription());
@@ -64,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
                 if (userData.getFollowed()){ //TRUE means change to FALSE means text set to FOllOW
                     btnFollow.setText("Follow");
                     userData.setFollowed(false);
-                    Toast.makeText(getApplicationContext(), "Followed", Toast.LENGTH_SHORT).show();
-                } else if (userData.getFollowed()) {
-                    btnFollow.setText("Unfollow");
-                    userData.setFollowed(true);
                     Toast.makeText(getApplicationContext(), "Unfollowed", Toast.LENGTH_SHORT).show();
+                } else {
+                    btnFollow.setText("Unfollow");
+                    userData.setFollowed(true); //Function not called????? TODO
+                    Toast.makeText(getApplicationContext(), "Followed", Toast.LENGTH_SHORT).show();
                 }
                 dbHandler.updateUser(userData);
             }
