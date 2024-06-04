@@ -2,7 +2,6 @@ package sg.edu.np.mad.madpractical5;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     private SQLiteDatabase db;
-    private DataBaseHandler dbHandler;
+    private DatabaseHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        dbHandler = new DataBaseHandler(this, null, null, 1);
+        dbHandler = new DatabaseHandler(this, null, null, 1);
         db = dbHandler.getWritableDatabase();
 
         TextView tvName = findViewById(R.id.profileName);

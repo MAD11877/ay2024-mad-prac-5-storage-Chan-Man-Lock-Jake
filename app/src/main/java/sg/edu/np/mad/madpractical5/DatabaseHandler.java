@@ -5,12 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class DataBaseHandler extends SQLiteOpenHelper {
+public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "UserDB.db";
@@ -20,7 +19,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_FOLLOWED = "followed";
 
-    public DataBaseHandler(Context context, String database_name, SQLiteDatabase.CursorFactory factory, int database_version) {
+    public DatabaseHandler(Context context, String database_name, SQLiteDatabase.CursorFactory factory, int database_version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
 

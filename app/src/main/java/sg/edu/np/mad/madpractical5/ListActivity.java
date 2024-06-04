@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ListActivity extends AppCompatActivity {
 
     private SQLiteDatabase db;
+    private DatabaseHandler dbHandler;
     private UserAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -30,7 +31,7 @@ public class ListActivity extends AppCompatActivity {
         });
         recyclerView = findViewById(R.id.listRecyclerView);
 
-        DataBaseHandler dbHandler = new DataBaseHandler(this, null, null, 1);
+        dbHandler = new DatabaseHandler(this, null, null, 1);
         db = dbHandler.getWritableDatabase();
         dbHandler.onReset(db);
         dbHandler.createNewUserData();
